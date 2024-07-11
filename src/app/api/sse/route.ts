@@ -1,5 +1,6 @@
 import { Redis } from 'ioredis';
 import { NextRequest } from 'next/server';
+export const dynamic = 'force-dynamic';
 
 const redis = new Redis(process.env.REDIS_URL!);
 
