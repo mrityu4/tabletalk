@@ -1,18 +1,17 @@
 import { Redis } from 'ioredis';
 import { NextRequest } from 'next/server';
 
-const redis = new Redis(process.env.REDIS_URL);
+const redis = new Redis(process.env.REDIS_URL!);
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const table = searchParams.get('table');
 
   const encoder = new TextEncoder();
+  const subscriber = redis.duplicate();
   const stream = new ReadableStream({
     async start(controller) {
-      const subscriber = redis.duplicate();
       await subscriber.subscribe(`table:${table}`);
-
       subscriber.on('message', (channel, message) => {
         controller.enqueue(encoder.encode(`data: ${message}\n\n`));
       });
@@ -31,3 +30,4 @@ export async function GET(request: NextRequest) {
     },
   });
 }
+

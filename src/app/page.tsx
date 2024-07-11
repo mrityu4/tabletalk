@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { addDish, createTable, getDishes, joinTable, searchTable } from './actions';
+import { addDish, createTable, deleteDish, getDishes, joinTable, searchTable } from './actions';
 
 export default function Home() {
   const [username, setUsername] = useState('');
@@ -32,13 +32,28 @@ export default function Home() {
 
       const eventSource = new EventSource(`/api/sse?table=${currentTable}`);
       eventSource.onmessage = (event) => {
-        const dish = JSON.parse(event.data);
-        console.log('Received dish', dish);
-        setDishes((prevDishes) => [...prevDishes, dish]);
+        const data = JSON.parse(event.data);
+        if (data.type === 'delete') {
+          setDishes((prevDishes) => prevDishes.filter(dish => dish !== data.dish));
+        } else {
+          setDishes((prevDishes) => [...prevDishes, data]);
+        }
+
       };
       return () => eventSource.close();
     }
   }, [currentTable]);
+
+  const handleDeleteDish = async (dishName: string) => {
+    if (currentTable) {
+      const result = await deleteDish(currentTable, dishName);
+      if (result.success) {
+        setDishes((prevDishes) => prevDishes.filter(dish => dish !== dishName));
+      } else {
+        alert(result.message);
+      }
+    }
+  };
 
   const handleUsernameSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(e.target as HTMLFormElement);
@@ -187,7 +202,7 @@ export default function Home() {
         {dishes.map((dish, index) => (
           <li className='w-full justify-between sm:w-72 bg-base-300 rounded-box flex p-4 items-center gap-2' key={index}>
             <span>{dish}</span>
-            <button className="btn btn-circle">
+            <button onClick={() => handleDeleteDish(dish)} className="btn btn-circle">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"

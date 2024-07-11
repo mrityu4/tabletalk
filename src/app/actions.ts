@@ -33,6 +33,17 @@ export async function getDishes(tableId: string) {
   return await redis.lrange(`dishes:${tableId}`, 0, -1);
 }
 
+export async function deleteDish(tableId: string, dishName: string) {
+  const removedCount = await redis.lrem(`dishes:${tableId}`, 0, dishName);
+  if (removedCount > 0) {
+    // Publish the deleted dish to the Redis channel
+    await redis.publish(`table:${tableId}`, JSON.stringify({ type: 'delete', dish: dishName }));
+    return { success: true, message: 'Dish deleted successfully' };
+  }
+  return { success: false, message: 'Dish not found' };
+}
+
+
 
 export async function addDish(tableId: string, dish: string) {
   await redis.rpush(`dishes:${tableId}`, dish);
