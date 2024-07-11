@@ -14,6 +14,7 @@ jobs:
         node-version: [v20.15.0]
     env:
       NEXT_WEBSITE_URL: ${{ secrets.NEXT_WEBSITE_URL }}
+      REDIS_URL: ${{ secrets.REDIS_URL }}
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
