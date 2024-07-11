@@ -3,6 +3,10 @@ import { Redis } from 'ioredis';
 
 const redis = new Redis(process.env.REDIS_URL!);
 
+export const getRedisUrlAction = async () => {
+  return { success: true, redisUrl: process.env.REDIS_URL! };
+};
+
 export async function createTable(tableName: string) {
   const exists = await redis.exists(`table:${tableName}`);
   if (exists) {

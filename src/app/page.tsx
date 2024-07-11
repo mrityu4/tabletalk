@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { addDish, createTable, deleteDish, getDishes, joinTable, searchTable } from './actions';
+import { addDish, createTable, deleteDish, getDishes, getRedisUrlAction, joinTable, searchTable } from './actions';
 
 export default function Home() {
   const [username, setUsername] = useState('');
@@ -11,8 +11,15 @@ export default function Home() {
   const [currentTable, setCurrentTable] = useState<string>();
   const [dishes, setDishes] = useState<string[]>([]);
   const [newDish, setNewDish] = useState('');
+  const [redisUrl, setRedisUrl] = useState('');
+
+  const getRedisUrl = async () => {
+    const result = await getRedisUrlAction();
+    setRedisUrl(result.redisUrl);
+  };
 
   useEffect(() => {
+    getRedisUrl()
     const storedUsername = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     if (storedUsername) {
       setUsername(storedUsername);
@@ -119,6 +126,7 @@ export default function Home() {
   if (!username) {
     return (
       <form onSubmit={handleUsernameSubmit} className='container flex justify-center mt-4  mx-auto gap-2'>
+        {redisUrl}
         <input
           type="text"
           name='username'
