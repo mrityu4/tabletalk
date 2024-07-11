@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
       subscriber.on('message', (channel, message) => {
         controller.enqueue(encoder.encode(`data: ${message}\n\n`));
       });
+      controller.enqueue(encoder.encode(`data: hello\n\n`));
     },
     cancel() {
       subscriber.unsubscribe();
