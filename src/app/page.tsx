@@ -167,12 +167,12 @@ export default function Home() {
   }
 
   return (
-    <div className='container mx-auto mt-3 p-3 sm:flex w-full sm:w-1/2 sm:flex-col border-opacity-50'>
+    <div className='container mx-auto mt-3 p-3 sm:flex w-full sm:w-1/2 sm:flex-col border-opacity-50 h-dvh'>
       <div className='flex gap-2 pb-5 items-center'>
-        <h2 className=' mx-auto pb-4 text-2xl w-full text-center'>Table: {currentTable}</h2>
+        <h2 className=' mx-auto pb-4 text-2xl w-full'>Table: {currentTable}</h2>
         <button className='btn mx-auto' onClick={copyShareLink}>Share Link</button>
       </div>
-      <form onSubmit={handleAddDish} className='flex gap-2 pb-4 justify-center'>
+      <form onSubmit={handleAddDish} className='flex gap-2 pb-6 justify-center'>
         <input
           type="text"
           className='input w-full max-w-xs'
@@ -183,22 +183,24 @@ export default function Home() {
         />
         <button className='btn' type="submit">Add</button>
       </form>
-      <ul className='flex flex-col gap-2 pb-4 items-center'>
+      <ul className='flex flex-col gap-2 pb-4 items-center h-full overflow-y-scroll'>
         {dishes.map((dish, index) => (
-          <li className='card bg-base-300 rounded-box flex p-4' key={index}>{dish} <button className="btn btn-circle">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          <li className='w-full justify-between sm:w-72 bg-base-300 rounded-box flex p-4 items-center gap-2' key={index}>
+            <span>{dish}</span>
+            <button className="btn btn-circle">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </li>
         ))}
       </ul>
