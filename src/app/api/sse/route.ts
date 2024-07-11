@@ -30,6 +30,7 @@ export async function GET(request: NextRequest) {
       'Cache-Control': 'no-cache, no-transform',
       'Connection': 'keep-alive',
       'Content-Encoding': 'none',
+      'X-Accel-Buffering': 'no',
     },
   });
 }
