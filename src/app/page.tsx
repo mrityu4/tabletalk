@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { addDish, createTable, deleteDish, getDishes, getRedisUrlAction, joinTable, searchTable } from './actions';
+import { addDish, createTable, deleteDish, getDishes,  joinTable, searchTable } from './actions';
 
 export default function Home() {
   const [username, setUsername] = useState('');
